@@ -57,7 +57,7 @@ def main(arg):
             if(step % FLAGS.print_interval==0 and step>0):
                 print("Step: {}, Loss: {}".format(step, loss) )
             
-            if(step+1 % FLAGS.save_interval==0 ):
+            if((step+1) % FLAGS.save_interval==0 ):
                 saver.save(sess, os.path.join(FLAGS.log_dir, 'model_{}.ckpt'.format(step+1)))
 
         coord.request_stop()

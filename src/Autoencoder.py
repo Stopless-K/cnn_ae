@@ -100,3 +100,12 @@ class Autoencoder(object):
 
 
 
+class ConvAutoencoder(Autoencoder):
+    def __init__(self, n_layers, kernel_size=3, transfer_function=tf.nn.softplus, optimizer=tf.train.AdamOptimizer(), ae_para=[0,0]):
+        super(ConvAutoencoder).__init__(n_layers, transfer_function, optimizer, ae_param)
+
+
+    def _initialize_weights(self):
+        all_weights = dict()
+
+      
