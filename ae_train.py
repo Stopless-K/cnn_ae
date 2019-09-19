@@ -1,16 +1,17 @@
 import tensorflow as tf
 import os
-from src.Autoencoder import Autoencoder
+from src.Autoencoder import Autoencoder, ConvAutoencoder
 
 
 FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string('train_path', './train/', 'training_data')
-tf.app.flags.DEFINE_string('log_dir', './experiments/first', 'log directory to write events')
+tf.app.flags.DEFINE_string('logdir', './experiments/first', 'log directory to write events')
 
 tf.app.flags.DEFINE_integer('batch_size', 128, 'batch size')
 tf.app.flags.DEFINE_integer('input_dim', 60, 'data dimension')
-tf.app.flags.DEFINE_integer('hidden_dim', 30, 'middle layer units')
+tf.app.flags.DEFINE_integer('input_channel', 1, 'channel dimension')
+tf.app.flags.DEFINE_integer('hidden_dim', 10, 'middle layer units')
 tf.app.flags.DEFINE_integer('num_iters', 100, 'number of iterations')
 tf.app.flags.DEFINE_integer('print_interval', 10, 'display frequency')
 tf.app.flags.DEFINE_integer('save_interval', 1000, 'save model frequency')
@@ -33,15 +34,15 @@ def main(arg):
     filelist = [os.path.join(FLAGS.train_path, _file) for _file in files]
     batch = read(filelist)
 
-    ae = Autoencoder(batch, [FLAGS.input_dim, FLAGS.hidden_dim],
+    ae = ConvAutoencoder(batch, [FLAGS.input_channel, FLAGS.hidden_dim],kernel_size = 3, 
                      transfer_function= tf.nn.relu, 
                      optimizer = tf.train.AdamOptimizer(learning_rate=FLAGS.lr),
                      ae_para = [FLAGS.corruption_level, 0]# sparse regularization set to zero
                     )
     
     saver = tf.train.Saver()
-    if not os.path.exists(FLAGS.log_dir):
-        os.mkdir(FLAGS.log_dir)
+    if not os.path.exists(FLAGS.logdir):
+        os.mkdir(FLAGS.logdir)
 
     with tf.Session() as sess:
         coord = tf.train.Coordinator()
@@ -58,7 +59,7 @@ def main(arg):
                 print("Step: {}, Loss: {}".format(step, loss) )
             
             if((step+1) % FLAGS.save_interval==0 ):
-                saver.save(sess, os.path.join(FLAGS.log_dir, 'model_{}.ckpt'.format(step+1)))
+                saver.save(sess, os.path.join(FLAGS.logdir, 'model_{}.ckpt'.format(step+1)))
 
         coord.request_stop()
         coord.join(threads)
