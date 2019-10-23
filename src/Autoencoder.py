@@ -129,9 +129,9 @@ class ConvAutoencoder(Autoencoder):
 
         # cost
         if self.sparse_reg == 0:
-            self.cost = 0.5 * tf.reduce_sum(tf.pow(tf.subtract(self.reconstruction, self.x), 2.0))
+            self.cost = 0.5 * tf.reduce_mean(tf.pow(tf.subtract(self.reconstruction, self.x), 2.0))
         else:
-            self.cost = 0.5 * tf.reduce_sum(tf.pow(tf.subtract(self.reconstruction, self.x), 2.0))+\
+            self.cost = 0.5 * tf.reduce_mean(tf.pow(tf.subtract(self.reconstruction, self.x), 2.0))+\
                         self.sparse_reg * self.kl_divergence(self.sparsity_level, self.hidden_encode[-1])
 
         self.optimizer = optimizer.minimize(self.cost)

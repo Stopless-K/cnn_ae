@@ -12,7 +12,7 @@ tf.app.flags.DEFINE_integer('batch_size', 128, 'batch size')
 tf.app.flags.DEFINE_integer('input_dim', 60, 'data dimension')
 tf.app.flags.DEFINE_integer('input_channel', 1, 'channel dimension')
 tf.app.flags.DEFINE_integer('hidden_dim', 10, 'middle layer units')
-tf.app.flags.DEFINE_integer('num_iters', 100, 'number of iterations')
+tf.app.flags.DEFINE_integer('num_iters', 1000, 'number of iterations')
 tf.app.flags.DEFINE_integer('print_interval', 10, 'display frequency')
 tf.app.flags.DEFINE_integer('save_interval', 1000, 'save model frequency')
 
